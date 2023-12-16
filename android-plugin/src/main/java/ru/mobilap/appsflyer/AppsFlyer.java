@@ -9,6 +9,8 @@ import android.view.View;
 import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
+
+import org.godotengine.godot.plugin.UsedByGodot;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,15 +46,15 @@ public class AppsFlyer extends GodotPlugin {
         return "AppsFlyer";
     }
 
-    @Override
-    public List<String> getPluginMethods() {
-        return Arrays.asList(
-                "init",
-                "track_event",
-                "track_revenue",
-                "appsflyer_id"
-        );
-    }
+//    @Override
+//    public List<String> getPluginMethods() {
+//        return Arrays.asList(
+//                "init",
+//                "track_event",
+//                "track_revenue",
+//                "appsflyer_id"
+//        );
+//    }
 
     /*
     @Override
@@ -68,7 +70,7 @@ public class AppsFlyer extends GodotPlugin {
 
 
     // Public methods
-
+    @UsedByGodot
     public void init(final String key, final boolean ProductionMode)
     {
         getActivity().runOnUiThread(new Runnable() {
@@ -125,7 +127,8 @@ public class AppsFlyer extends GodotPlugin {
             }
         });
     }
-    
+
+    @UsedByGodot
     public void logAdRevenue(final String adUnit, final String pAdType)
     {
     	Map<String, String> customParams = new HashMap<>();
@@ -155,20 +158,24 @@ public class AppsFlyer extends GodotPlugin {
     		);
     }
 
+    @UsedByGodot
     public void track_event(final String event, final Dictionary params)
     {
         AppsFlyerLib.getInstance().logEvent(getActivity(), event, params);
     }
 
+    @UsedByGodot
     public void set_uninstall_token(final String token)
     {
     }
 
+    @UsedByGodot
     public void track_revenue(final String revenue, final String currency, final String signature, final String originalJson, final String public_key)
     {
         AppsFlyerLib.getInstance().validateAndLogInAppPurchase(getActivity(), public_key, signature, originalJson, revenue, currency, null);
     }
 
+    @UsedByGodot
     public String appsflyer_id()
     {
         return AppsFlyerLib.getInstance().getAppsFlyerUID(getActivity());
