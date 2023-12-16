@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="ru.mobilap.appsflyer">
 
-  <application>
+  <application android:exported="true">
     <!--
     Plugin metadata:
     - In the `android:name` attribute, the `org.godotengine.plugin.v1` prefix
@@ -20,7 +20,7 @@
       </intent-filter>
     </receiver>
 
-    <service android:name="com.appsflyer.FirebaseInstanceIdListener">
+    <service android:name="com.appsflyer.FirebaseInstanceIdListener" android:exported="true">
       <intent-filter>
         <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
       </intent-filter>

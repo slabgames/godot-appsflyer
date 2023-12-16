@@ -16,6 +16,14 @@ import com.appsflyer.AppsFlyerLib;
 import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerInAppPurchaseValidatorListener;
 
+import com.appsflyer.adrevenue.AppsFlyerAdRevenue;
+import com.appsflyer.adrevenue.adnetworks.AppsFlyerAdNetworkEventType;
+import com.appsflyer.adrevenue.adnetworks.generic.MediationNetwork;
+import com.appsflyer.adrevenue.adnetworks.generic.Scheme;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.Locale;
+
 import org.godotengine.godot.Dictionary;
 import org.godotengine.godot.Godot;
 import org.godotengine.godot.GodotLib;
@@ -106,6 +114,11 @@ public class AppsFlyer extends GodotPlugin {
                                                           Log.d(TAG, "onValidateInAppFailure called: " + error);
                                                       }
                                                   });
+
+
+                    AppsFlyerAdRevenue.Builder afRevenueBuilder = new AppsFlyerAdRevenue.Builder(getActivity().getApplication());     
+        
+        			AppsFlyerAdRevenue.initialize(afRevenueBuilder.build());
                 } catch (Exception e) {
                     Log.e(TAG, "Failed to initialize AppsFlyerSdk: " + e.getMessage()); 
                 }
@@ -113,6 +126,35 @@ public class AppsFlyer extends GodotPlugin {
         });
     }
     
+    public void logAdRevenue(final String adUnit, final String pAdType)
+    {
+    	Map<String, String> customParams = new HashMap<>();
+		customParams.put(Scheme.COUNTRY, "US");
+		customParams.put(Scheme.AD_UNIT, adUnit);
+        String adType =AppsFlyerAdNetworkEventType.BANNER.toString();
+
+        if(pAdType=="banner")
+        {
+            adType = AppsFlyerAdNetworkEventType.BANNER.toString();
+        }
+        else if(pAdType=="interstitial"){
+            adType = AppsFlyerAdNetworkEventType.INTERSTITIAL.toString();
+        }
+        else if(pAdType=="rewarded")
+        {
+            adType = AppsFlyerAdNetworkEventType.REWARDED.toString();
+        }
+		customParams.put(Scheme.AD_TYPE, adType);
+		customParams.put(Scheme.PLACEMENT, "place");
+		customParams.put(Scheme.ECPM_PAYLOAD, "encrypt");
+		// customParams.put("foo", "test1");
+    	AppsFlyerAdRevenue.logAdRevenue("applovinmax",
+    		MediationNetwork.applovinmax,
+    		Currency.getInstance(Locale.US),
+    		0.00,customParams
+    		);
+    }
+
     public void track_event(final String event, final Dictionary params)
     {
         AppsFlyerLib.getInstance().logEvent(getActivity(), event, params);
